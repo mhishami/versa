@@ -27,7 +27,7 @@
 -include ("vaccord.hrl").
 
 %% API.
--export([start_link/0]).
+-export([start_link/1]).
 
 %% gen_server.
 -export([init/1]).
@@ -38,32 +38,35 @@
 -export([code_change/3]).
 
 -record(state, {
+  name :: binary()
 }).
 
 -define (SERVER, ?MODULE).
 
 %% API.
 
--spec start_link() -> {ok, pid()}.
-start_link() ->
-	gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+-spec start_link(Name :: atom()) -> {ok, pid()}.
+start_link(Name) ->
+  gen_server:start_link({local, ?SERVER}, ?MODULE, [], [Name]).
 
 %% gen_server.
 
-init([]) ->
-	{ok, #state{}}.
+init(Name) ->
+  ?INFO("Module ~p - ~p started on node ~p~n", [Name, ?SERVER, node()]),
+  process_flag(trap_exit, true),
+  {ok, #state{name=Name}}.
 
 handle_call(_Request, _From, State) ->
-	{reply, ignored, State}.
+  {reply, ignored, State}.
 
 handle_cast(_Msg, State) ->
-	{noreply, State}.
+  {noreply, State}.
 
 handle_info(_Info, State) ->
-	{noreply, State}.
+  {noreply, State}.
 
 terminate(_Reason, _State) ->
-	ok.
+  ok.
 
 code_change(_OldVsn, State, _Extra) ->
-	{ok, State}.
+  {ok, State}.

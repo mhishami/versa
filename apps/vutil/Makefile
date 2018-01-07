@@ -20,8 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-PROJECT = vaccount
-PROJECT_DESCRIPTION = Versa Accounts Component
+PROJECT = vutil
+PROJECT_DESCRIPTION = Versa Utility Component
 PROJECT_VERSION = 0.1.0
+
+DEPS = base58
+
+dep_base58 = git https://github.com/mhishami/base58.git master
 
 include ../../erlang.mk

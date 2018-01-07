@@ -1,6 +1,6 @@
 %% MIT License
 %%
-%% Copyright (c) 2018, Versa Developers.
+%% Copyright (c) 2017 VirtueFintech
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,20 @@
 %% SOFTWARE.
 %%
 %%
--include ("logger.hrl").
+-module (vutil_b58).
+-author ('Hisham Ismail <mhishami@gmail.com>').
 
-%% record structure
-%%
--type hash() :: binary().
--export_type([hash/0]).
+-export ([decode/1]).
+-export ([encode/1]).
 
--record (vrecord, {
-    hash        :: hash(),
-    trx         :: vtransaction(),
-    prev_hash   :: hash()
-  }).
--type vrecord() :: #vrecord{}.
--export_type([vrecord/0]).
+-spec decode( list() | binary()) -> binary().
+decode(List) when is_list(List) ->
+  base58:base58_to_binary(List);
+decode(Bin) when is_binary(Bin) ->
+  base58:base58_to_binary(binary_to_list(Bin)).
 
--record(vtransaction, {
-    from        :: address(),
-    to          :: address(),
-    value       :: non_neg_integer()
-  }).
--type vtransaction() :: #vtransaction{}.
--export_type([vtransaction/0]).
+-spec encode(list() | binary()) -> binary().
+encode(List) when is_list(List) ->
+  list_to_binary(base58:binary_to_base58(list_to_binary(List)));
+encode(Bin) when is_binary(Bin) ->
+  list_to_binary(base58:binary_to_base58(Bin)).

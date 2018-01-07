@@ -21,25 +21,20 @@
 %% SOFTWARE.
 %%
 %%
--include ("logger.hrl").
+-module (vutil_hex).
+-author ('Hisham Ismail <mhishami@gmail.com>').
 
-%% record structure
-%%
--type hash() :: binary().
--export_type([hash/0]).
+-export ([bin_to_hex/1]).
+-export ([hex_to_bin/1]).
 
--record (vrecord, {
-    hash        :: hash(),
-    trx         :: vtransaction(),
-    prev_hash   :: hash()
-  }).
--type vrecord() :: #vrecord{}.
--export_type([vrecord/0]).
+bin_to_hex(Bin) ->
+  lists:flatten([io_lib:format("~2.16.0B", [X]) ||
+    X <- binary_to_list(Bin)]).
 
--record(vtransaction, {
-    from        :: address(),
-    to          :: address(),
-    value       :: non_neg_integer()
-  }).
--type vtransaction() :: #vtransaction{}.
--export_type([vtransaction/0]).
+hex_to_bin(S) ->
+  hex_to_bin(S, []).
+hex_to_bin([], Acc) ->
+  list_to_binary(lists:reverse(Acc));
+hex_to_bin([X,Y|T], Acc) ->
+  {ok, [V], []} = io_lib:fread("~16u", [X,Y]),
+  hex_to_bin(T, [V | Acc]).

@@ -28,7 +28,7 @@ PROJECT_VERSION = 0.1.0
 SP = 2
 
 DEPS = lager sync
-LOCAL_DEPS = vaccord \
+LOCAL_DEPS = vaccord vaccount vnet vutil \
 						 mnesia crypto public_key inets sasl
 
 include erlang.mk
