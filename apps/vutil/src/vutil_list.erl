@@ -21,52 +21,21 @@
 %% SOFTWARE.
 %%
 %%
--module(vaccord).
--behaviour(gen_server).
--author('Hisham Ismail <mhishami@gmail.com>').
--include ("vaccord.hrl").
+-module (vutil_list).
+-author ('Hisham Ismail <mhishami@gmail.com>').
 
-%% API.
--export([start_link/1]).
+-export ([from_bin/1]).
+-export ([from_integer/1]).
+-export ([to_bin/1]).
 
-%% gen_server.
--export([init/1]).
--export([handle_call/3]).
--export([handle_cast/2]).
--export([handle_info/2]).
--export([terminate/2]).
--export([code_change/3]).
+-spec from_bin(binary()) -> list().
+from_bin(Bin) when is_binary(Bin) ->
+  erlang:binary_to_list(Bin).
 
--record(state, {
-  name :: binary()
-}).
+-spec from_integer(integer()) -> list().
+from_integer(Int) when is_integer(Int) ->
+  erlang:integer_to_list(Int).
 
--define (SERVER, ?MODULE).
-
-%% API.
-
--spec start_link(Name :: atom()) -> {ok, pid()}.
-start_link(Name) ->
-  gen_server:start_link({local, ?SERVER}, ?MODULE, [], [Name]).
-
-%% gen_server.
-
-init(Name) ->
-  process_flag(trap_exit, true),
-  ?INFO("Module ~p - ~p started on node ~p~n", [Name, ?SERVER, node()]),
-  {ok, #state{name=Name}}.
-
-handle_call(_Request, _From, State) ->
-  {reply, ignored, State}.
-
-handle_cast(_Msg, State) ->
-  {noreply, State}.
-
-handle_info(_Info, State) ->
-  {noreply, State}.
-
-terminate(_Reason, _State) ->
-  ok.
-
-code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+-spec to_bin(list()) -> binary().
+to_bin(List) when is_list(List) ->
+  erlang:list_to_binary(List).

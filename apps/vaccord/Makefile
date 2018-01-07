@@ -24,4 +24,8 @@ PROJECT = vaccord
 PROJECT_DESCRIPTION = Versa Accord Component
 PROJECT_VERSION = 0.1.0
 
+DEPS = hash_ring
+
+dep_hash_ring = git https://github.com/mhishami/hash_ring.git master
+
 include ../../erlang.mk

@@ -26,10 +26,28 @@
 
 -export([start_link/0]).
 -export([init/1]).
+-export([start_socket/0]).
+
+-define(CHILD(I, Type), {I, {I, start_link, []}, permanent, 5000, Type, [I]}).
 
 start_link() ->
   supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 init([]) ->
-  Procs = [],
-  {ok, {{one_for_one, 1, 5}, Procs}}.
+  Port = os:getenv(<<"VERSA_TCP_PORT">>, 8787),
+  {ok, Sock} = gen_tcp:listen(Port, [binary, {active, once}]),
+  spawn_link(fun spawn_listeners/0),
+
+  Server = {server,
+            {vnet_server, start_link, [Sock]},
+            temporary, 1000, worker, [vnet_server]},
+  Procs = [Server],
+  {ok, {{simple_one_for_one, 60, 3600}, Procs}}.
+
+start_socket() ->
+  supervisor:start_child(?MODULE, []).
+
+spawn_listeners() ->
+  [start_socket() || _ <- lists:seq(1, 10)],
+  ok.
+
