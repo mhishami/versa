@@ -26,7 +26,7 @@
 %% record structure
 %%
 -type hash() :: binary().
--export_type([hash/0]).
+-type address() :: binary().
 
 -record (vrecord, {
     hash        :: hash(),
@@ -34,7 +34,6 @@
     prev_hash   :: hash()
   }).
 -type vrecord() :: #vrecord{}.
--export_type([vrecord/0]).
 
 -record(vtransaction, {
     from        :: address(),
@@ -42,4 +41,6 @@
     value       :: non_neg_integer()
   }).
 -type vtransaction() :: #vtransaction{}.
--export_type([vtransaction/0]).
+
+-export_type([hash/0, address/0]).
+-export_type([vtransaction/0, vrecord/0]).
