@@ -1,5 +1,5 @@
 PROJECT = vaccord
-PROJECT_DESCRIPTION = New project
+PROJECT_DESCRIPTION = Versa Accord Component
 PROJECT_VERSION = 0.1.0
 
 include ../../erlang.mk
